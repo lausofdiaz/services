@@ -28,7 +28,7 @@ function iniciarSesion(){
         password: password.value
     }; 
 
-
+console.log(datos)
 }
 
 </script>

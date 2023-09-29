@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import IniciarSesion from './views/IniciarSesion.vue'
+import Crud from './views/Crud.vue'
 </script>
 
 <template>
@@ -13,7 +14,6 @@ import IniciarSesion from './views/IniciarSesion.vue'
 
 <style scoped>
 section{
-   
     
 }
 </style>

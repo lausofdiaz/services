@@ -1,6 +1,8 @@
 <template>
     <div class="inicioSesion">
       <h1>Inicio de Sesión</h1>
+      <label for="">mor_2314</label><br>
+      <label for="">83r5^_</label><br>
       <label for="">Usuario</label>
       <input type="text" v-model="username">
       <br>
@@ -10,7 +12,7 @@
       <button  @click="iniciarSesion">Iniciar Sesión</button>
     </div>
     <Crud></Crud>
-  </template>
+   </template>
   
   <style scoped>
  
@@ -18,10 +20,9 @@
   
   <script setup lang="ts">
   import { useRouter } from 'vue-router';
-  import Crud from '../views/Crud.vue'
   import axios from 'axios'
   import { ref } from 'vue';
-   
+  import  Crud  from "../views/Crud.vue";
   const username = ref('');
   const password = ref('');
   const router = useRouter();
@@ -33,14 +34,15 @@
         password: password.value
       });
   
-      if (response.status === 200) {
+     if (response.status === 200) {
         console.log('Inicio de sesión exitoso');
         console.log(response.data); 
         const token = response.data.token;
+        localStorage.setItem('token', token);
         alert("Inicio de sesión exitoso");
-        router.push(`/Crud?token=${token}`);
-      
-      } else {
+        router.push({ name: 'Crud', query: { token } });
+
+      }else {
         console.error('Inicio de sesión fallido');
         alert("Inicio de sesión fallido")
       }

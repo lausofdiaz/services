@@ -12,8 +12,3 @@ import Crud from './views/Crud.vue'
 </main> 
 </template>
 
-<style scoped>
-section{
-    
-}
-</style>

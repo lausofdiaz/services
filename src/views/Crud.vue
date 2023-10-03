@@ -1,6 +1,41 @@
 <template>
-    <div class="crud">
-      <div class="agregar">
+  <nav id="nav">
+      <ul>
+          <li><a href="#agregar"><i>Crear</i></a></li>
+      </ul>
+      <ul>
+          <li><a href="#"><i>Cerrar sesión</i></a></li>
+      </ul>
+  </nav>
+  <div class="table" id="table">
+     <table class="tabla">
+        <thead>
+          <tr>
+            <th>Precio</th>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Imagen</th>
+            <th>Categoría</th>
+            <th>Borrar</th>
+            <th>Modificar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(producto, index) of productos" :key="index">
+            <td>{{ producto.price }}</td>
+            <td>{{ producto.title }}</td>
+            <td>{{ producto.description }}</td>
+            <td><img :src="producto.image" style="width:100px; height: 100px;;"/></td>
+            <td>{{ producto.category }}</td>
+            <td><button @click="eliminar(index)">Borrar</button></td>
+            <td><button @click="cargarDatosEdicion(index)">
+            <a href="#edit"><i>Modificar</i></a>
+              </button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="agregar" id="agregar">
       <h1>Agregar producto</h1>
       <div class="input">
       <label for="">Título del producto</label>
@@ -22,187 +57,41 @@
       <label for="">Categoría del producto</label>
       <input type="text" name="" id="category" v-model="category">
     </div>
-      <button @click="crear(nuevoProd)">Agregar producto</button>
+    <br>
+      <button @click="crear()">Agregar producto</button>
     </div>
-    <div class="table">
-     <table class="tabla">
-        <thead>
-          <tr>
-            <th>Precio</th>
-            <th>Título</th>
-            <th>Descripción</th>
-            <th>Imagen</th>
-            <th>Categoría</th>
-            <th>Borrar</th>
-            <th>Modificar</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(producto, index) of productos" :key="index">
-            <td>{{ producto.price }}</td>
-            <td>{{ producto.title }}</td>
-            <td>{{ producto.description }}</td>
-            <td><img :src="producto.image" style="width:100px; height: 100px;;"/></td>
-            <td>{{ producto.category }}</td>
-            <td><button @click="eliminar(index)">Borrar</button></td>
-            <td><button @click="editarProducto(index)">Modificar</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    </div>
-      <div v-if="productoEnEdicion">
-      <h1>Editar</h1>
-      <label for="">title</label>
-      <input type="text" name="" id="title" v-model="productoEnEdicion.title">
-      <br>
-      <label for="">price</label>
-      <input type="text" name="" id="price" v-model="productoEnEdicion.price">
-      <br>
-      <label for="">description</label>
-      <input type="text" name="" id="description" v-model="productoEnEdicion.description">
-      <br>
-      <label for="">image</label>
-      <input type="text" name="" id="image" v-model="productoEnEdicion.image">
-      <br>
-      <label for="">category</label>
-      <input type="text" name="" id="category" v-model="productoEnEdicion.category">
-      <br>
-      <button @click="actualizarProducto">Modificar</button>
-      <button @click="cerrar">Cerrar</button>
-    </div>
-  </template>
-  <style scoped>
-  .crud{
-    display: grid;
-    grid-template-areas: "agregar table";
-    gap: 0px;
-    position: relative;
-  border-bottom: 2px solid #adadad;
-  margin: 30px 0;
-  }
-  .agregar{
-    grid-area: agregar;
-  padding: 20px; /* Añade espacio interno para los elementos */
-  background-color: #f9f9f9; /* Fondo gris claro */
-  }
-  .table{
-   grid-area: table;
-  overflow-x: auto; /* Agrega una barra de desplazamiento horizontal si es necesario */
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 20px; /* Añade espacio interno para los elementos */
-  max-height: 500px; /* Altura máxima para evitar el desbordamiento */
 
-  }
-  h1, tr th{
-  text-align: center;
-  padding: 0 0 20px 0;
-  border-bottom: 1px solid silver;
-  
-}
-.crud .agregar{
-  padding: 0 40px;
-box-sizing: border-box;
-}
+    
 
-.input input{
-  width: 100%;
-  padding: 0 5px;
-  height: 40px;
-  font-size: 16px;
-  border: none;
-  background: none;
-  outline: none;
-}
-.input span::before{
-  content: '';
-  position: absolute;
-  top: 40px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: #6c3483;
-  transition:.5s ;
-}
-.input input:focus ~ span::before,
-.input input:focus ~ span::before{
-  width: 100%;
-}
-button{
-  width: 100%;
-  height: 50px;
-  border: 1px solid;
-  background: #6c3483;
-  border-radius: 25px;
-  font-size: 18px;
-  color: white;
-  outline: none;
-}
-button:hover{
-border-color: purple;
-transition: .5s;
-}
-/* Estilos para la tabla */
-.table {
-  width: 100%;
-  overflow-x: auto; /* Agrega una barra de desplazamiento horizontal si es necesario */
-}
+<div v-if="productoEnEdicion" class="edit" id="edit">
+  <h1>Editar</h1>
+  <div class="input">
+  <label for="">Título</label>
+  <input type="text" name="title" id="title" v-model="productoEnEdicion.title">
+</div>
+<div class="input">
+  <label for="">Precio</label>
+  <input type="text" name="price" id="price" v-model="productoEnEdicion.price">
+  </div>
+  <div class="input">
+  <label for="">Descripción</label>
+  <input type="text" name="description" id="description" v-model="productoEnEdicion.description">
+</div>
+<div class="input">
+  <label for="">Imagen</label>
+  <input type="text" name="image" id="image" v-model="productoEnEdicion.image">
+</div>
+  <div class="input">
+  <label for="">Categoría</label>
+  <input type="text" name="category" id="category" v-model="productoEnEdicion.category">
+  </div>
+  <br>
+  <button @click="actualizarProducto(producto)"><a href="#nav"><i>Modificar</i></a></button>
+</div>
+</template>
 
-.tabla {
-  width: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
-  background-color: #fff;
-  margin-bottom: 20px; /* Espacio en la parte inferior de la tabla */
-}
-
-/* Estilos para las cabeceras de la tabla */
-.tabla th {
-  background-color: #6c3483;
-  color: white;
-  text-align: left;
-  padding: 10px;
-  border: 1px solid #6c3483;
-}
-
-/* Estilos para las celdas de la tabla */
-.tabla td {
-  padding: 10px;
-  border: 1px solid #ccc;
-}
-
-/* Estilos para las filas impares */
-.tabla tr:nth-child(odd) {
-  background-color: #f2f2f2;
-}
-
-/* Estilos para las celdas de encabezado y resaltar fila al pasar el ratón */
-.tabla th, .tabla td {
-  text-align: left;
-}
-
-/* Estilos para resaltar la fila al pasar el ratón por encima */
-.tabla tr:hover {
-  background-color: #e0e0e0;
-}
-
-/* Estilos para el ancho de las columnas (ajusta según tus necesidades) */
-/* .tabla th:nth-child(1), .tabla td:nth-child(1) {
-  width: 20%;
-}
-.tabla th:nth-child(2), .tabla td:nth-child(2) {
-  width: 30%;
-}
-...
-*/
-
-  </style>
-  
-  <script setup lang="ts">
-  import router from '@/router';
-import axios from 'axios'
+<script setup lang="ts">
+  import axios from 'axios'
   import { ref } from 'vue';
   const id = ref('');
   const price = ref('');
@@ -225,8 +114,8 @@ import axios from 'axios'
       console.error('Error al cargar productos', error);
     }
   }
-  
-  function crear() {
+  cargarProductos();
+  async function crear() {
     const nuevoProd = {
       id: productos.value.length + 1,  
       price: price.value,
@@ -235,23 +124,30 @@ import axios from 'axios'
       image: image.value,
       category: category.value,
     };
-    productos.value.push(nuevoProd);
-    console.log(nuevoProd)
-    console.log(nuevoProd.price)
-    price.value = '';
-    title.value = '';
-    description.value = '';
-    image.value = '';
-    category.value = '';
+    const response = await axios.post('https://fakestoreapi.com/products', nuevoProd);
+
+    if (response.status === 200) {
+      console.log('Producto creado exitosamente', response.data);
+      alert('Producto creado exitosamente')
+      // Agrega el nuevo producto a la lista localmente
+      productos.value.push(response.data);
+
+      // Limpia los campos después de la creación exitosa
+      price.value = '';
+      title.value = '';
+      description.value = '';
+      image.value = '';
+      category.value = '';
+    } else {
+      console.error('Error al crear el producto');
+    }
   }
-  cargarProductos();
 
-   async function eliminar(index) {
+  
+  async function eliminar(index) {
   const productoAEliminar = productos.value[index];
-
   try {
     const response = await axios.delete(`https://fakestoreapi.com/products/${productoAEliminar.id}`);
-
     if (response.status === 200) {
       console.log('Producto eliminado exitosamente');
       // Elimina el producto localmente
@@ -264,19 +160,13 @@ import axios from 'axios'
   }
 }
 
-
-function editarProducto(index) {
-  // Verifica si productoEnEdicion.value es null o si su propiedad id no es válida
-  if (!productos.value[index].id) {
-    console.error('El producto seleccionado para edición no tiene un ID válido');
-    return;
+async function cargarDatosEdicion(index) {
+    // Cargar los datos del producto en el formulario de edición
+    productoEnEdicion.value = {...productos.value[index]};
   }
 
-  // Establece el producto seleccionado para edición
-  productoEnEdicion.value = productos.value[index];
-}
-async function actualizarProducto() {
-  try {
+  async function actualizarProducto(index) {
+    try {
     // Verifica que productoEnEdicion.value no sea null y tenga una propiedad id
     if (!productoEnEdicion.value || !productoEnEdicion.value.id) {
       console.error('El producto en edición es inválido o no tiene un ID');
@@ -293,6 +183,7 @@ async function actualizarProducto() {
 
     if (response.status === 200) {
       console.log('Producto actualizado exitosamente');
+      alert('Producto actualizado exitosamente');
       const index = productos.value.findIndex(p => p.id === productoEnEdicion.value.id);
       productos.value[index] = response.data;
       productoEnEdicion.value = null;
@@ -303,8 +194,88 @@ async function actualizarProducto() {
     console.error('Error al actualizar el producto', error);
   }
 }
-function cerrar(){
+</script>
 
-  console.log("CErrar app")
-}  </script>
-  
+<style scoped>
+nav {
+    background-color: #333; 
+    overflow: hidden;
+    width: 100%;
+    height: 70px;  
+}
+nav ul {
+    list-style-type: none; 
+ }
+nav ul li {
+    float: left; 
+    margin-right: 20px; 
+}
+nav ul li a {
+    text-decoration: none;
+    color: white; 
+}
+button a {
+    text-decoration: none;
+    color: white; 
+    font-style: normal;
+  }
+.agregar{
+  padding: 20px; 
+  background-color: #f9f9f9; 
+  }
+  .table{
+  overflow-x: auto; /* Agrega una barra de desplazamiento horizontal si es necesario */
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px; /* Añade espacio interno para los elementos */
+  max-height: 500px; /* Altura máxima para evitar el desbordamiento */
+  }
+  h1, tr th{
+  text-align: center;
+  padding: 0 0 20px 0;
+  border-bottom: 1px solid silver;
+}
+.agregar{
+  padding: 0 40px;
+box-sizing: border-box;
+}
+.input input{
+  width: 100%;
+  padding: 0 5px;
+  height: 40px;
+  font-size: 16px;
+  background: none;
+  border: none; /* Elimina los bordes predeterminados */
+  border-bottom: 1px solid #000; /* Establece el borde inferior */
+  outline: none; /* Elimina el contorno predeterminado al hacer clic */
+}
+.input span::before{
+  content: '';
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #6c3483;
+  transition:.5s ;
+}
+.input input:focus ~ span::before,
+.input input:focus ~ span::before{
+  width: 100%;
+}
+button{
+  width: 100%;
+  height: 50px;
+  border: 1px solid;
+  background: #000000;
+  border-radius: 25px;
+  font-size: 18px;
+  color: white;
+  outline: none;
+}
+button:hover{
+background: rgb(80, 74, 80);
+transition: .5s;
+}
+</style>

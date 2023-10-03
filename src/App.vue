@@ -7,9 +7,9 @@ import Crud from './views/Crud.vue'
 <template>
 <main>
   <section>
-    <!-- <IniciarSesion></IniciarSesion> -->
-    <Crud></Crud>
-  </section>
+ <!-- <IniciarSesion></IniciarSesion>-->
+     <Crud></Crud> 
+   </section>
 </main> 
 </template>
 <style scoped>

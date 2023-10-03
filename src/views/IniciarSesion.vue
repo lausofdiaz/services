@@ -45,7 +45,7 @@
         const token = response.data.token;
         localStorage.setItem('token', token);
         alert("Inicio de sesión exitoso");
-        router.push({ name: 'Crud', query: { token } });
+        router.push({ name: 'Crud'});
 
       }else {
         console.error('Inicio de sesión fallido');
@@ -69,6 +69,7 @@ transform: translate(-50%, -50%);
 width: 400px;
 background: white;
 border-radius: 10px;
+border: 1px solid rgb(0, 0, 0);
 
 }
 .inicioSesion h1{
